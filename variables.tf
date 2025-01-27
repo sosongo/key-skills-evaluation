@@ -60,3 +60,8 @@ variable "ssh_private_key_path" {
   type        = string
   default     = "~/.ssh/cli-sosongo-key-pair-name.pem"
   }
+
+variable "docker_image" {
+  description = "Docker image to deploy"
+  type        = string
+}

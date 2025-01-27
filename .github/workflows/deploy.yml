@@ -53,7 +53,7 @@ jobs:
         with:
           terraform_version: 1.5.5
 
-      - name: Terraform Init
+      - name: Initialize Terraform
         run: terraform init
 
       - name: Terraform Validate
@@ -70,6 +70,8 @@ jobs:
       # 9. Configurar e Iniciar Docker en EC2
       - name: Configure EC2 and Deploy Container
         run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key $INSTANCE_USER@<EC2_PUBLIC_IP> << EOF
           sudo docker stop $(sudo docker ps -q) || true
           sudo docker run -d -p 80:80 ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest
