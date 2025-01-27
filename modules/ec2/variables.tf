@@ -36,6 +36,5 @@ variable "security_group_id" {
 
 variable "docker_image" {
   description = "Docker image to deploy"
-  type        = string 
-  default     = "nginx:latest"
+  type        = string
 }
