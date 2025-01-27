@@ -36,11 +36,7 @@ variable "key_name" {
 variable "ssh_cidr" {
   description = "CIDR block allowed for SSH access"
   type        = string
-  default     = "186.107.76.237/32"
-  validation {
-    condition     = can(regex("^\\d{1,3}(\\.\\d{1,3}){3}/\\d{1,2}$", var.ssh_cidr))
-    error_message = "The ssh_cidr value must be a valid CIDR block."
-  }
+  default     = "0.0.0.0/0"
 }
 
 variable "http_cidr" {
