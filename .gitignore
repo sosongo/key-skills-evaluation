@@ -1,0 +1,55 @@
+# System and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Private keys and secrets
+*.pem
+*.key
+*.crt
+
+# Terraform files
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+override.tf
+override.tf.json
+.terraform.lock.hcl
+terraform.tfvars
+terraform.tfvars.json
+
+# Docker files
+docker-compose.override.yml
+.dockerignore
+*.tar
+**/html/
+
+# Log files
+*.log
+logs/
+debug.log
+error.log
+/var/log/
+
+# Temporary and build files
+*.tmp
+*.bak
+*.swp
+*.swo
+*.pid
+
+# GitHub Actions
+# Avoid cache or temporary files generated during workflows
+actions-runs/
+.github/*cache
+.github/*temp
+
+# Binary and compiled files
+*.out
+*.exe
+*.dll
+*.so
+*.dylib
