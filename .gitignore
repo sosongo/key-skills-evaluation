@@ -25,7 +25,6 @@ terraform.tfvars.json
 docker-compose.override.yml
 .dockerignore
 *.tar
-**/html/
 
 # Log files
 *.log
