@@ -64,4 +64,5 @@ variable "ssh_private_key_path" {
 variable "docker_image" {
   description = "Docker image to deploy"
   type        = string
+  default     = "sosongo/my-web-app:latest"
 }
