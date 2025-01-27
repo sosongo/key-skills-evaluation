@@ -26,9 +26,7 @@ resource "aws_instance" "web_server" {
   vpc_security_group_ids = [var.security_group_id]
 
   ## - Script : Install Docker and execute the image
-  user_data = templatefile("${path.module}/../../scripts/init.sh", {
-    DOCKER_IMAGE = var.docker_image
-  })
+  user_data = file("${path.module}/../../scripts/init.sh")
 
   iam_instance_profile = var.iam_instance_profile # Agregado aquí
 

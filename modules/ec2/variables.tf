@@ -33,8 +33,3 @@ variable "security_group_id" {
   description = "Security Group ID"
   type        = string 
 }
-
-variable "docker_image" {
-  description = "Docker image to deploy"
-  type        = string
-}
