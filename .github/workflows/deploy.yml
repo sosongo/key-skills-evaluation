@@ -47,23 +47,29 @@ jobs:
           docker tag $IMAGE_NAME:latest ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest
 
-      # 6. Terraform Init
+      # 6. Instalar Terraform
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.5
+
+      # 7. Inicializar Terraform
       - name: Initialize Terraform
         run: terraform init -input=false
 
-      # 7. Terraform Validate
+      # 8. Validar Configuración
       - name: Terraform Validate
         run: terraform validate
 
-      # 8. Terraform Plan
+      # 9. Plan de Terraform
       - name: Terraform Plan
         run: terraform plan -var="docker_image=${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest"
 
-      # 9. Terraform Apply
+      # 10. Aplicar Terraform
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="docker_image=${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest"
 
-      # 10. Configurar e Iniciar Docker en EC2
+      # 11. Configurar EC2 y Desplegar el Contenedor
       - name: Configure EC2 and Deploy Container
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
