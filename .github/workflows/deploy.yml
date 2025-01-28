@@ -87,9 +87,9 @@ jobs:
             exit 1
           fi
           
-          # Mostrar la dirección IP y escribirla en GITHUB_ENV
-          echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP"
-          echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" | sed 's/.*=/::set-env name=EC2_PUBLIC_IP::/' >> $GITHUB_ENV
+          # Exportar la IP como variable de entorno para GitHub Actions
+          echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
+          echo "EC2 Public IP is $EC2_PUBLIC_IP"
 
       # 13. Configurar EC2 y Desplegar el Contenedor
       - name: Configure EC2 and Deploy Container
