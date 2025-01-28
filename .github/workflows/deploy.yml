@@ -76,8 +76,8 @@ jobs:
         run: cat $GITHUB_ENV
 
       # 12. Obtener Dirección Pública del EC2
-      - name: Debug EC2 Public IP
-        run: echo "Extracted EC2_PUBLIC_IP: ${{ env.EC2_PUBLIC_IP }}"
+      # - name: Debug EC2 Public IP
+      #   run: echo "Extracted EC2_PUBLIC_IP: ${{ env.EC2_PUBLIC_IP }}"
         
       - name: Configure EC2 and Deploy Container
         run: |
