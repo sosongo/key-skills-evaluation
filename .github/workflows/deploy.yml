@@ -72,13 +72,13 @@ jobs:
       # 11. Depurar la salida de Terraform para la dirección IP del EC2
       - name: Debug EC2 Public IP Output
         run: |
-          /home/runner/work/_temp/27d2988d-b295-4c91-a9bf-f9020455c31f/terraform-bin output -raw web_server_public_ip || true
+          terraform output -raw web_server_public_ip || true
 
-      # 11. Obtener Dirección Pública del EC2
+      # 12. Obtener Dirección Pública del EC2
       - name: Get EC2 Public IP
         id: get_ec2_ip
         run: |
-          EC2_PUBLIC_IP=$(/home/runner/work/_temp/27d2988d-b295-4c91-a9bf-f9020455c31f/terraform-bin output -raw web_server_public_ip 2>&1)
+          EC2_PUBLIC_IP=$(terraform output -raw web_server_public_ip 2>&1)
           echo "Terraform Output: $EC2_PUBLIC_IP"
           
           # Extraer dirección IP válida
@@ -91,7 +91,7 @@ jobs:
           echo "EC2_PUBLIC_IP=$VALID_IP"
           echo "EC2_PUBLIC_IP=$VALID_IP" >> $GITHUB_ENV
 
-      # 12. Configurar EC2 y Desplegar el Contenedor
+      # 13. Configurar EC2 y Desplegar el Contenedor
       - name: Configure EC2 and Deploy Container
         run: |
           mkdir -p ~/.ssh
