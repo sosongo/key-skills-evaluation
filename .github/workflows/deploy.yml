@@ -72,6 +72,7 @@ jobs:
       # 11. Configurar EC2 y Desplegar el Contenedor
       - name: Configure EC2 and Deploy Container
         run: |
+          mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key $INSTANCE_USER@<EC2_PUBLIC_IP> << EOF
