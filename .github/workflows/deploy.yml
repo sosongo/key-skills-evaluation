@@ -81,46 +81,36 @@ jobs:
 
       - name: Save EC2 IP to File
         run: |
-          # Obtener la salida de Terraform
           RAW_OUTPUT=$(terraform output -raw web_server_public_ip || true)
-
-          # Eliminar caracteres no deseados como el '%' al final
-          CLEANED_OUTPUT=$(echo "$RAW_OUTPUT" | tr -d '%\r\n' | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}')
-
-          # Verificar si la salida está vacía
-          if [ -z "$CLEANED_OUTPUT" ]; then
+          CLEANED_IP=$(echo "$RAW_OUTPUT" | tr -d '%\r\n' | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}')
+          
+          if [ -z "$CLEANED_IP" ]; then
             echo "Error: Could not extract a valid IP address from Terraform output."
             echo "Terraform Raw Output: $RAW_OUTPUT"
             exit 1
           fi
 
-          # Guardar la IP limpia en un archivo
-          echo "$CLEANED_OUTPUT" > ec2_ip.txt
-          echo "Saved cleaned EC2 IP to ec2_ip.txt: $CLEANED_OUTPUT"
+          echo "$CLEANED_IP" > ec2_ip.txt
+          echo "Saved cleaned EC2 IP to ec2_ip.txt: $CLEANED_IP"
 
-      - name: Verify ec2_ip.txt Content
+      - name: Verify and Export EC2 IP
         run: |
-          if [ -f ec2_ip.txt ]; then
-            echo "Contents of ec2_ip.txt:"
-            cat ec2_ip.txt
-
-            # Leer solo la primera línea válida
-            RAW_IP=$(head -n 1 ec2_ip.txt | tr -d '\r\n')
-            EC2_PUBLIC_IP=$(echo "$RAW_IP" | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}')
-
-            # Validar que la IP es válida
-            if [ -z "$EC2_PUBLIC_IP" ]; then
-              echo "Error: Invalid IP format in ec2_ip.txt."
-              echo "Raw IP from file: $RAW_IP"
-              exit 1
-            fi
-
-            echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
-            echo "Extracted EC2 Public IP: $EC2_PUBLIC_IP"
-          else
+          if [ ! -f ec2_ip.txt ]; then
             echo "Error: ec2_ip.txt not found."
             exit 1
           fi
+
+          RAW_IP=$(head -n 1 ec2_ip.txt | tr -d '\r\n')
+          CLEANED_IP=$(echo "$RAW_IP" | grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}')
+
+          if [ -z "$CLEANED_IP" ]; then
+            echo "Error: Invalid IP format in ec2_ip.txt."
+            echo "Raw IP from file: $RAW_IP"
+            exit 1
+          fi
+
+          echo "EC2_PUBLIC_IP=$CLEANED_IP" >> $GITHUB_ENV
+          echo "Extracted EC2 Public IP: $CLEANED_IP"
 
       - name: Read EC2 IP from File
         run: |
