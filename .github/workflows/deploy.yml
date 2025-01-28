@@ -91,10 +91,14 @@ jobs:
             exit 1
           fi
           
-          # Registrar y exportar la dirección IP
+          # Registrar la dirección IP y exportarla de forma segura
+          echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" | tee -a $GITHUB_ENV
           echo "EC2 Public IP is $EC2_PUBLIC_IP"
-          echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
         shell: /usr/bin/bash -e {0}
+
+      # 12. Depurar Dirección Pública del EC2 Exportada
+      - name: Debug EC2 Public IP
+        run: echo "Extracted EC2_PUBLIC_IP: ${{ env.EC2_PUBLIC_IP }}"
 
       # 13. Configurar EC2 y Desplegar el Contenedor
       - name: Configure EC2 and Deploy Container
