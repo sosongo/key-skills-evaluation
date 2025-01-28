@@ -69,14 +69,19 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="docker_image=${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest"
 
-      # 11. Configurar EC2 y Desplegar el Contenedor
+      # 11. Obtener Dirección Pública del EC2
+      - name: Get EC2 Public IP
+        id: get_ec2_ip
+        run: |
+          EC2_PUBLIC_IP=$(terraform output -raw web_server_public_ip)
+          echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
+
+      # 12. Configurar EC2 y Desplegar el Contenedor
       - name: Configure EC2 and Deploy Container
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-
-          EC2_PUBLIC_IP=$(terraform output -raw web_server_public_ip)
 
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key $INSTANCE_USER@$EC2_PUBLIC_IP "
             sudo docker stop \$(sudo docker ps -q) || true &&
