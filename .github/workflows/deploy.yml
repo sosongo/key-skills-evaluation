@@ -67,7 +67,12 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="docker_image=${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest"
 
-      # 11. Obtener Dirección Pública del EC2
+      # 11. Depurar la salida de Terraform para la dirección IP del EC2
+      - name: Debug EC2 Public IP Output
+        run: |
+          terraform output -raw web_server_public_ip || true
+
+      # 12. Obtener Dirección Pública del EC2
       - name: Get EC2 Public IP
         id: get_ec2_ip
         run: |
@@ -88,11 +93,12 @@ jobs:
           echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
           echo "EC2 Public IP is $EC2_PUBLIC_IP"
 
-      # 12. Depurar Dirección Pública del EC2 Exportada
+      # 13. Depurar Dirección Pública del EC2 Exportada
       - name: Debug EC2 Public IP
-        run: echo "Extracted EC2_PUBLIC_IP: ${{ env.EC2_PUBLIC_IP }}"
+        run: |
+          echo "Extracted EC2_PUBLIC_IP: ${{ env.EC2_PUBLIC_IP }}"
 
-      # 13. Configurar EC2 y Desplegar el Contenedor
+      # 14. Configurar EC2 y Desplegar el Contenedor
       - name: Configure EC2 and Deploy Container
         run: |
           mkdir -p ~/.ssh
