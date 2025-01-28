@@ -93,9 +93,9 @@ jobs:
           echo "::set-output name=public_ip::$EC2_PUBLIC_IP"
           echo "EC2 Public IP is $EC2_PUBLIC_IP"
 
-      # 13. Depurar Dirección Pública del EC2 Exportada
-      - name: Debug EC2 Public IP
-        run: echo "Extracted EC2_PUBLIC_IP: ${{ steps.get_ec2_ip.outputs.public_ip }}"
+      # # 13. Depurar Dirección Pública del EC2 Exportada
+      # - name: Debug EC2 Public IP
+      #   run: echo "Extracted EC2_PUBLIC_IP: ${{ steps.get_ec2_ip.outputs.public_ip }}"
 
       # 14. Configurar EC2 y Desplegar el Contenedor
       - name: Configure EC2 and Deploy Container
