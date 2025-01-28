@@ -31,6 +31,7 @@ variable "subnet_cidr" {
 variable "key_name" {
   description = "Name of the existing key pair to use for the EC2 instance"
   type        = string
+  default     = "cli-sosongo-key-pair-name"
 }
 
 variable "ssh_cidr" {
