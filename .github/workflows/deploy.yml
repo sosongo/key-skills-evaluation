@@ -87,7 +87,6 @@ jobs:
           # Registrar la dirección IP y exportarla de forma segura
           echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
           echo "EC2 Public IP is $EC2_PUBLIC_IP"
-        shell: /usr/bin/bash -e {0}
 
       # 12. Depurar Dirección Pública del EC2 Exportada
       - name: Debug EC2 Public IP
