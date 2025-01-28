@@ -14,7 +14,6 @@ jobs:
       AWS_REGION: "us-east-1"
       IMAGE_NAME: "my-web-app"
       INSTANCE_USER: "ec2-user"
-      SSH_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
     steps:
       # 1. Checkout del Código
@@ -31,8 +30,7 @@ jobs:
 
       # 3. Build de la Imagen Docker
       - name: Build Docker Image
-        run: |
-          docker build -t $IMAGE_NAME:latest .
+        run: docker build -t $IMAGE_NAME:latest .
 
       # 4. Login en Docker Hub
       - name: Docker Hub Login
@@ -69,12 +67,7 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve -var="docker_image=${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest"
 
-      # 11. Depurar la salida de Terraform para la dirección IP del EC2
-      - name: Debug EC2 Public IP Output
-        run: |
-          terraform output -raw web_server_public_ip || true
-
-      # 12. Obtener Dirección Pública del EC2
+      # 11. Obtener Dirección Pública del EC2
       - name: Get EC2 Public IP
         id: get_ec2_ip
         run: |
@@ -92,7 +85,7 @@ jobs:
           fi
           
           # Registrar la dirección IP y exportarla de forma segura
-          echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" | tee -a $GITHUB_ENV
+          echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
           echo "EC2 Public IP is $EC2_PUBLIC_IP"
         shell: /usr/bin/bash -e {0}
 
@@ -107,7 +100,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key $INSTANCE_USER@$EC2_PUBLIC_IP "
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/deploy_key $INSTANCE_USER@${{ env.EC2_PUBLIC_IP }} "
             sudo docker stop \$(sudo docker ps -q) || true &&
             sudo docker run -d -p 80:80 ${{ secrets.DOCKER_USERNAME }}/$IMAGE_NAME:latest
           "
