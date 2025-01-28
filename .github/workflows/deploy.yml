@@ -92,7 +92,7 @@ jobs:
           # Mostrar la dirección IP para depuración
           echo "Extracted EC2 Public IP: $EC2_PUBLIC_IP"
           
-          # Exportar la IP como variable para el siguiente paso
+          # Exportar la IP como variable para GitHub Actions
           echo "EC2_PUBLIC_IP=$EC2_PUBLIC_IP" >> $GITHUB_ENV
 
       # # 13. Depurar Dirección Pública del EC2 Exportada
